@@ -1,0 +1,978 @@
+/* =========================================================
+   Ellie Carpenter — portfolio
+   A paper-and-ink system, drawn from the printed work itself:
+   off-white stock, black ink, a screen-printed red and a
+   bookcloth olive, with typewriter type for quoted material.
+   ========================================================= */
+
+/* ---------- 1. Tokens ---------- */
+
+:root {
+  /* Surfaces */
+  --paper:        #f4f1ea;
+  --paper-warm:   #ece7dc;
+  --paper-deep:   #e2dccd;
+  --card:         #fffdf8;
+
+  /* Ink */
+  --ink:          #14110f;
+  --ink-soft:     #45403a;
+  --ink-faint:    #7d766c;
+  --rule:         #d6cfc0;
+
+  /* Accents pulled from the prints */
+  --red:          #d8323f;
+  --red-deep:     #a8202c;
+  --olive:        #6b7150;
+  --olive-deep:   #4d5239;
+
+  /* Type */
+  --display: "Futura", "Century Gothic", "Avenir Next", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --type: "Courier New", Courier, ui-monospace, monospace;
+
+  /* Rhythm */
+  --measure: 66ch;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --shell: 1180px;
+  --section: clamp(4.5rem, 11vw, 9rem);
+
+  --radius: 2px;
+  --shadow: 0 1px 2px rgba(20, 17, 15, .06), 0 12px 34px -18px rgba(20, 17, 15, .3);
+  --shadow-lift: 0 2px 4px rgba(20, 17, 15, .07), 0 30px 60px -28px rgba(20, 17, 15, .45);
+
+  --ease: cubic-bezier(.2, .7, .3, 1);
+
+  color-scheme: light;
+}
+
+/* ---------- 2. Reset & base ---------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* A faint paper tooth, so flat colour never reads as screen-flat. */
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(216, 50, 63, .05), transparent 42%),
+    radial-gradient(circle at 84% 78%, rgba(107, 113, 80, .07), transparent 46%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: clamp(1rem, .96rem + .2vw, 1.075rem);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img,
+svg { display: block; max-width: 100%; }
+
+a { color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p { margin: 0 0 1.15em; max-width: var(--measure); }
+p:last-child { margin-bottom: 0; }
+
+ul { margin: 0; padding: 0; list-style: none; }
+
+::selection {
+  background: var(--red);
+  color: var(--paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ---------- 3. Layout helpers ---------- */
+
+.shell {
+  width: min(100% - (var(--gutter) * 2), var(--shell));
+  margin-inline: auto;
+}
+
+.shell--narrow { --shell: 780px; }
+
+.section { padding-block: var(--section); }
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 200;
+  padding: .7rem 1.1rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: 500 .85rem/1 var(--body);
+  text-decoration: none;
+  transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 1rem; }
+
+/* Small caps label used throughout as a sectional marker. */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 0 1.5rem;
+  font-family: var(--body);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.eyebrow::before {
+  content: "";
+  width: 2rem;
+  height: 2px;
+  background: var(--red);
+  flex: none;
+}
+
+.lede {
+  font-size: clamp(1.15rem, 1.02rem + .6vw, 1.45rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* ---------- 4. Brush rule ---------- */
+/* Echoes the inked brush stroke on the exhibition card. */
+
+.brush {
+  width: clamp(120px, 20vw, 220px);
+  height: 14px;
+  color: var(--ink);
+}
+.brush--red { color: var(--red); }
+
+/* ---------- 5. Header ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: saturate(150%) blur(12px);
+  -webkit-backdrop-filter: saturate(150%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease), background-color .3s var(--ease);
+}
+.site-header.is-stuck {
+  border-bottom-color: var(--rule);
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 4.75rem;
+}
+
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .55rem;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  letter-spacing: .01em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.wordmark span { color: var(--ink); }
+.wordmark em {
+  font-style: normal;
+  font-family: var(--body);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.nav a {
+  position: relative;
+  font-size: .92rem;
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding-block: .35rem;
+  transition: color .2s var(--ease);
+}
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s var(--ease);
+}
+.nav a:hover,
+.nav a[aria-current="page"] { color: var(--ink); }
+.nav a:hover::after,
+.nav a[aria-current="page"]::after { transform: scaleX(1); }
+
+.nav-toggle {
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.nav-toggle span,
+.nav-toggle span::before,
+.nav-toggle span::after {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform .28s var(--ease), opacity .2s var(--ease);
+}
+.nav-toggle span { margin-inline: auto; position: relative; }
+.nav-toggle span::before,
+.nav-toggle span::after { content: ""; position: absolute; left: 0; }
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+
+.nav-toggle[aria-expanded="true"] span { background: transparent; }
+.nav-toggle[aria-expanded="true"] span::before { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span::after { transform: translateY(-6px) rotate(-45deg); }
+
+/* Below this the descriptor would crowd out the menu button, so the
+   wordmark stands on its own. */
+@media (max-width: 420px) {
+  .wordmark em { display: none; }
+}
+
+@media (max-width: 720px) {
+  .nav-toggle { display: block; }
+  .nav {
+    position: absolute;
+    inset: 100% 0 auto;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .35s var(--ease);
+  }
+  .nav > ul {
+    overflow: hidden;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding-inline: var(--gutter);
+  }
+  .nav[data-open="true"] { grid-template-rows: 1fr; }
+  .nav li + li { border-top: 1px solid var(--rule); }
+  .nav a { display: block; padding-block: 1rem; font-size: 1.05rem; }
+  .nav a::after { display: none; }
+}
+
+/* ---------- 6. Hero ---------- */
+
+.hero {
+  position: relative;
+  padding-block: clamp(3.5rem, 9vw, 7rem) clamp(3rem, 8vw, 6rem);
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 1.4rem + 5.4vw, 5.1rem);
+  line-height: .98;
+  margin-bottom: 1.5rem;
+}
+.hero h1 .accent {
+  position: relative;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  margin-top: 2.25rem;
+}
+
+.tag {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: .45rem .85rem;
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .85rem;
+  margin-top: 2.25rem;
+}
+
+/* Stacked paper: the exhibition card, the book, the print. */
+.hero__stack {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  max-width: 460px;
+  margin-inline: auto;
+  width: 100%;
+}
+.hero__stack .frame {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+.hero__stack .frame:nth-child(1) {
+  transform: rotate(-9deg) translate(-13%, 4%) scale(.8);
+  filter: saturate(.85);
+  opacity: .92;
+}
+.hero__stack .frame:nth-child(2) {
+  transform: rotate(7deg) translate(14%, -6%) scale(.78);
+  opacity: .95;
+  z-index: 1;
+}
+.hero__stack .frame:nth-child(3) {
+  transform: rotate(-1.5deg) scale(.96);
+  z-index: 2;
+}
+
+@media (max-width: 880px) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__stack { max-width: 340px; }
+}
+
+/* On narrow screens the fanned sheets have to tuck in, or the rotated
+   one reaches past the edge of the viewport. */
+@media (max-width: 620px) {
+  .hero__stack { max-width: 280px; }
+  .hero__stack .frame:nth-child(1) { transform: rotate(-7deg) translate(-8%, 3%) scale(.84); }
+  .hero__stack .frame:nth-child(2) { transform: rotate(6deg) translate(8%, -4%) scale(.82); }
+}
+
+/* ---------- 7. Buttons ---------- */
+
+.btn {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .9rem 1.5rem;
+  border: 1px solid var(--btn-bg);
+  border-radius: var(--radius);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-size: .9rem;
+  font-weight: 500;
+  letter-spacing: .01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s var(--ease), box-shadow .25s var(--ease), background-color .25s var(--ease), color .25s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.btn:active { transform: translateY(0); }
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--ink);
+  border-color: var(--ink);
+}
+.btn--ghost:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn svg { width: 1em; height: 1em; flex: none; }
+
+/* Text link with a sliding underline. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--ink);
+  background-image: linear-gradient(var(--red), var(--red));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size .3s var(--ease), color .2s var(--ease);
+  padding-bottom: 2px;
+}
+.link:hover {
+  background-size: 100% 2px;
+  color: var(--red-deep);
+}
+.link svg { width: .85em; height: .85em; transition: transform .25s var(--ease); }
+.link:hover svg { transform: translateX(3px); }
+
+/* ---------- 8. Image frames + placeholders ---------- */
+/* Images fade in on load. If a photograph has not been added yet,
+   the frame keeps a printed-looking placeholder in its place —
+   so the layout is never broken by a missing file.
+
+   The hiding rules are scoped to .js: only a scripted page can add
+   .is-loaded, so without JS the photographs must simply show. */
+
+.frame {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--paper-warm);
+  box-shadow: var(--shadow);
+  isolation: isolate;
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.js .frame img {
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity .6s var(--ease), transform .8s var(--ease);
+}
+.js .frame.is-loaded img { opacity: 1; transform: none; }
+
+/* Unscripted: the placeholder sits behind the photograph instead of
+   being faded out, so a real image simply covers it. */
+.frame img { position: relative; z-index: 1; }
+
+.frame__placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: .6rem;
+  padding: 1.5rem;
+  text-align: center;
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(20, 17, 15, .028) 0 10px,
+      transparent 10px 20px),
+    linear-gradient(160deg, var(--paper-warm), var(--paper-deep));
+  transition: opacity .5s var(--ease);
+}
+.js .frame.is-loaded .frame__placeholder { opacity: 0; pointer-events: none; }
+
+.frame__placeholder::before {
+  content: "";
+  width: clamp(46px, 22%, 84px);
+  height: 6px;
+  background: var(--red);
+  opacity: .8;
+}
+
+.frame__placeholder span {
+  font-family: var(--type);
+  font-size: .78rem;
+  line-height: 1.45;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  max-width: 26ch;
+}
+.frame__placeholder small {
+  font-family: var(--body);
+  font-size: .66rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* Placeholder colourways, so a grid of them reads as a considered
+   set rather than a row of identical boxes. Add --olive or --ink
+   to any .frame to change its holding colour. */
+.frame--olive .frame__placeholder {
+  background:
+    repeating-linear-gradient(135deg, rgba(20, 17, 15, .03) 0 10px, transparent 10px 20px),
+    linear-gradient(160deg, #e7e4d4, #dbd8c2);
+}
+.frame--olive .frame__placeholder::before { background: var(--olive); }
+
+.frame--ink .frame__placeholder {
+  background:
+    repeating-linear-gradient(135deg, rgba(20, 17, 15, .04) 0 10px, transparent 10px 20px),
+    linear-gradient(160deg, #e6e2d8, #d5cfc1);
+}
+.frame--ink .frame__placeholder::before { background: var(--ink); }
+
+.frame--tall { aspect-ratio: 3 / 4; }
+.frame--wide { aspect-ratio: 16 / 10; }
+.frame--square { aspect-ratio: 1; }
+.frame--spread { aspect-ratio: 4 / 3; }
+
+/* ---------- 9. Featured project ---------- */
+
+.featured {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.featured::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: linear-gradient(var(--red), var(--olive));
+}
+
+.featured h3 {
+  font-size: clamp(2rem, 1.3rem + 2.6vw, 3.1rem);
+  margin-bottom: .35rem;
+}
+
+.featured__meta {
+  font-family: var(--type);
+  font-size: .8rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 1.35rem;
+}
+
+@media (max-width: 880px) {
+  .featured { grid-template-columns: 1fr; }
+}
+
+/* ---------- 10. Work grid ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform .35s var(--ease);
+}
+.card:hover { transform: translateY(-6px); }
+.card:hover .frame { box-shadow: var(--shadow-lift); }
+.card .frame { transition: box-shadow .35s var(--ease); }
+.card .frame img { transition: opacity .6s var(--ease), transform .7s var(--ease); }
+.card:hover .frame.is-loaded img { transform: scale(1.04); }
+
+.card h3 {
+  font-size: 1.35rem;
+  margin-bottom: .3rem;
+}
+.card p {
+  font-size: .95rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.card__kicker {
+  font-family: var(--type);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--red-deep);
+  margin-bottom: .5rem;
+  display: block;
+}
+
+/* ---------- 11. Quotes ---------- */
+/* Set in typewriter type, as the books were. */
+
+.stamp {
+  font-family: var(--type);
+  font-size: clamp(1.15rem, .95rem + 1.1vw, 1.9rem);
+  line-height: 1.4;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  max-width: 24ch;
+  margin: 0;
+}
+
+.pullquote {
+  display: grid;
+  gap: 1.5rem;
+  /* Sized to the quotation rather than to the page, so a few short
+     lines are not stranded in a full-width card. */
+  max-width: 62ch;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--red);
+  border-radius: var(--radius);
+}
+.pullquote blockquote { margin: 0; }
+.pullquote cite {
+  font-style: normal;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---------- 12. About ---------- */
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .about { grid-template-columns: 1fr; }
+  .about .frame--tall { max-width: 340px; }
+}
+
+.facts {
+  display: grid;
+  gap: 0;
+  margin-top: 2.5rem;
+  border-top: 1px solid var(--rule);
+}
+.facts div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 10rem) 1fr;
+  gap: 1rem;
+  padding-block: .9rem;
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+.facts dt {
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.facts dd { margin: 0; font-size: .98rem; }
+@media (max-width: 520px) {
+  .facts div { grid-template-columns: 1fr; gap: .2rem; }
+}
+
+/* ---------- 13. Contact ---------- */
+
+.contact {
+  position: relative;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  padding: clamp(2.5rem, 6vw, 4.5rem);
+  overflow: hidden;
+}
+.contact::after {
+  content: "";
+  position: absolute;
+  right: -10%;
+  bottom: -40%;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(216, 50, 63, .38), transparent 62%);
+  pointer-events: none;
+}
+.contact h2 {
+  font-size: clamp(2rem, 1.3rem + 3vw, 3.4rem);
+  margin-bottom: 1rem;
+}
+.contact p { color: color-mix(in srgb, var(--paper) 78%, transparent); }
+.contact .eyebrow { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+  position: relative;
+  z-index: 1;
+}
+.contact__links .btn {
+  --btn-bg: var(--paper);
+  --btn-fg: var(--ink);
+}
+.contact__links .btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--paper);
+  border-color: color-mix(in srgb, var(--paper) 45%, transparent);
+}
+.contact__links .btn--ghost:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ---------- 14. Footer ---------- */
+
+.site-footer {
+  border-top: 1px solid var(--rule);
+  padding-block: 2.5rem 3rem;
+  margin-top: var(--section);
+}
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+  font-size: .85rem;
+  color: var(--ink-faint);
+}
+.site-footer a { text-decoration: none; }
+.site-footer a:hover { color: var(--ink); }
+.site-footer ul { display: flex; flex-wrap: wrap; gap: 1.25rem; }
+
+/* ---------- 15. Case study ---------- */
+
+.case-hero {
+  padding-block: clamp(3rem, 7vw, 5.5rem) clamp(2rem, 5vw, 3.5rem);
+}
+.case-hero h1 {
+  font-size: clamp(3rem, 1.6rem + 7vw, 6.5rem);
+  line-height: .92;
+  margin-bottom: 1.25rem;
+}
+.case-hero .lede { max-width: 34ch; }
+
+.backlink {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-decoration: none;
+  margin-bottom: 2rem;
+  transition: color .2s var(--ease), gap .2s var(--ease);
+}
+.backlink:hover { color: var(--ink); gap: .8rem; }
+.backlink svg { width: .9em; height: .9em; }
+
+.case-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem 2rem;
+  padding-block: 2rem;
+  border-block: 1px solid var(--rule);
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+.case-meta dt {
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: .4rem;
+}
+.case-meta dd { margin: 0; font-size: .98rem; }
+
+/* A reading column inside the standard shell. Narrow blocks stay flush
+   with the wide ones, so the left edge never wanders down the page. */
+.column { max-width: 70ch; }
+
+.prose h2 {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem);
+  margin-bottom: 1.1rem;
+  max-width: 22ch;
+}
+.prose h3 {
+  font-size: 1.3rem;
+  margin: 2.25rem 0 .75rem;
+}
+.prose > * + h2 { margin-top: clamp(3rem, 7vw, 4.5rem); }
+
+.prose ul.bullets {
+  display: grid;
+  gap: .75rem;
+  margin: 0 0 1.5rem;
+  max-width: var(--measure);
+}
+.prose ul.bullets li {
+  position: relative;
+  padding-left: 1.6rem;
+  color: var(--ink-soft);
+}
+.prose ul.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .62em;
+  width: .6rem;
+  height: 2px;
+  background: var(--red);
+}
+
+/* Two-up and full-bleed figure arrangements between passages. */
+.figures {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  margin-block: clamp(2.5rem, 6vw, 4rem);
+}
+.figures--two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+
+figcaption {
+  margin-top: .85rem;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--ink-faint);
+  max-width: 52ch;
+}
+
+.figure-block figure { margin: 0; }
+
+/* ---------- 16. Lightbox ---------- */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  /* Near-opaque: at .92 the page behind still ghosted through the ink. */
+  background: rgba(20, 17, 15, .97);
+  opacity: 0;
+  visibility: hidden;
+  /* Visibility flips instantly on open (so the close button can take focus
+     straight away) and only on close is it held back until the fade ends. */
+  transition: opacity .3s var(--ease), visibility 0s linear .3s;
+}
+.lightbox[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .3s var(--ease), visibility 0s linear 0s;
+}
+.lightbox img {
+  max-width: min(100%, 1100px);
+  max-height: 82vh;
+  width: auto;
+  object-fit: contain;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8);
+}
+.lightbox__caption {
+  margin-top: 1.25rem;
+  color: color-mix(in srgb, var(--paper) 80%, transparent);
+  font-size: .85rem;
+  text-align: center;
+  max-width: 60ch;
+}
+.lightbox__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244, 241, 234, .35);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--paper);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s var(--ease);
+}
+.lightbox__close:hover { background: rgba(244, 241, 234, .16); }
+
+.frame--zoomable { cursor: zoom-in; }
+
+/* ---------- 17. Motion ---------- */
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js .reveal { opacity: 1; transform: none; }
+  .js .frame img { opacity: 1; transform: none; }
+}
+
+/* ---------- 18. Print ---------- */
+
+@media print {
+  .site-header,
+  .nav-toggle,
+  .lightbox,
+  .contact::after { display: none !important; }
+  body { background: #fff; }
+  .js .reveal { opacity: 1; transform: none; }
+  .js .frame img { opacity: 1; transform: none; }
+  a { text-decoration: underline; }
+}
