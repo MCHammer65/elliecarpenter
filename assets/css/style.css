@@ -639,6 +639,38 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
 }
 
+/* ---------- 10b. Gallery ---------- */
+/* Paintings hang rather than link: each frame opens in the lightbox
+   instead of navigating, so these are figures, not cards. */
+
+.gallery {
+  display: grid;
+  gap: clamp(1.75rem, 3.5vw, 3rem);
+}
+.gallery--major { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
+.gallery--studies { grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); }
+
+.gallery figure { margin: 0; }
+.gallery .frame { transition: box-shadow .35s var(--ease), transform .35s var(--ease); }
+.gallery figure:hover .frame {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-4px);
+}
+
+.gallery h3 {
+  font-size: 1.2rem;
+  margin: 1.15rem 0 .25rem;
+}
+.gallery .meta {
+  font-family: var(--type);
+  font-size: .74rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0;
+}
+.gallery figcaption { margin-top: .6rem; }
+
 /* ---------- 11. Quotes ---------- */
 /* Set in typewriter type, as the books were. */
 
