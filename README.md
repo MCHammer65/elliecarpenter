@@ -1,9 +1,9 @@
 # Ellie Carpenter — portfolio
 
-A hand-built portfolio site for graphic designer Ellie Carpenter, leading with
-**Grip**, her final major project at Leeds Arts University (2024): an interactive
-educational body of work on the Windrush Generation, held inside a vintage
-suitcase.
+A hand-built portfolio site for painter and graphic designer Ellie Carpenter,
+covering two bodies of work: her **alcohol ink paintings**, and **Grip**, her
+final major project at Leeds Arts University (2024) — an interactive educational
+body of work on the Windrush Generation, held inside a vintage suitcase.
 
 Plain HTML, CSS and JavaScript. No build step, no frameworks, no dependencies —
 open `index.html` in a browser and it works.
@@ -11,12 +11,13 @@ open `index.html` in a browser and it works.
 ## Structure
 
 ```
-index.html            Home — hero, selected work, about, contact
-projects/grip.html    Full case study for Grip
-404.html              Not-found page
-assets/css/style.css  The whole design system (tokens at the top)
-assets/js/main.js     Nav, image loading, scroll reveals, lightbox
-assets/images/        Photographs — see the README in that folder
+index.html               Home — hero, selected work, about, contact
+projects/paintings.html  Painting gallery — framed works and studies
+projects/grip.html       Full case study for Grip
+404.html                 Not-found page
+assets/css/style.css     The whole design system (tokens at the top)
+assets/js/main.js        Nav, image loading, scroll reveals, lightbox
+assets/images/           Photographs — see the README in that folder
 ```
 
 ## Running it locally
@@ -46,15 +47,23 @@ presentable even with no photos in place.
 
 The copy lives directly in the HTML. Two things worth knowing:
 
-- **Quoted material is verbatim.** Ellie's exhibition statement, the engraved
-  domino tag, and the two book quotations are reproduced as written.
-- **The connecting case-study copy is a draft** written around those quotes and
-  the photographs — the reasoning about process, binding and exhibition
-  decisions should be read through and corrected by Ellie before the site goes
-  public.
+- **Quoted material is verbatim.** Ellie's exhibition statement, the text printed
+  inside the suitcase lid, the engraved domino tag, the book credit page and the
+  two book quotations are reproduced as written.
+- **The connecting copy is a draft** written around those quotes and the
+  photographs — the reasoning about process, binding and exhibition decisions,
+  and the description of the painting method and medium, should be read through
+  and corrected by Ellie before the site goes public. In particular the paintings
+  are described as *alcohol ink*, which was inferred from the photographs.
 
 A commented block in `index.html` (search for `ADDING A NEW PROJECT`) shows how
-to add further projects to the work grid.
+to add further projects to the work section.
+
+## Credits carried by the site
+
+The Grip case study credits **R.E.K. Phillips** for the 1971 words, the Phillips
+family for the photographs taken in Jamaica and England, and Ellie Carpenter for
+the design and making. Keep that credit intact in any rewrite.
 
 ## Contact details
 
