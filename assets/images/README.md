@@ -6,18 +6,18 @@ will appear on the site automatically — no code changes needed.
 Until a file exists, its frame shows a printed-looking placeholder instead, so
 the layout never breaks and the site can go live before every photo is ready.
 
-## Paintings
+## Paintings (earlier work, shown on the home page)
 
-| Filename | Where it appears | Suggested crop |
+| Filename | Where it appears | Shape |
 |---|---|---|
-| `painting-blue-copper.jpg` | Home hero, paintings hero + gallery, link previews | Landscape, ~1600 × 1300 |
-| `painting-jellyfish.jpg` | Home hero, paintings gallery | Landscape, ~1600 × 1100 |
-| `painting-red-gold.jpg` | Home featured card, paintings gallery | Landscape, ~1600 × 1100 |
-| `painting-tessellation.jpg` | Paintings gallery | Landscape, ~1600 × 1200 |
-| `study-roses.jpg` | Paintings gallery (studies) | Landscape, ~1200 × 900 |
-| `study-blue-copper.jpg` | Paintings gallery (studies) | Landscape, ~1200 × 900 |
-| `study-teal-gold.jpg` | Paintings gallery (studies) | Landscape, ~1200 × 900 |
-| `study-green-poppies.jpg` | Paintings gallery (studies) | Landscape, ~1200 × 900 |
+| `painting-blue-copper.jpg` | Home — earlier work gallery | Portrait |
+| `painting-jellyfish.jpg` | Home — earlier work gallery | Portrait |
+| `painting-red-gold.jpg` | Home — earlier work gallery | Portrait |
+| `painting-tessellation.jpg` | Home — earlier work gallery | Portrait |
+| `study-roses.jpg` | Home — earlier work gallery | Portrait |
+| `study-blue-copper.jpg` | Home — earlier work gallery | Portrait |
+| `study-teal-gold.jpg` | Home — earlier work gallery | Portrait |
+| `study-green-poppies.jpg` | Home — earlier work gallery | Portrait |
 
 Shoot the framed pieces square-on and crop to the frame's outer edge. These are
 high-gloss, so photograph them in soft indirect light — a window to one side,

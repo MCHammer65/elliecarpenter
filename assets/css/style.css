@@ -552,6 +552,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 .frame--ink .frame__placeholder::before { background: var(--ink); }
 
+/* Crop from the top, so a tall document keeps its heading when it has to
+   sit in a wider box alongside landscape photographs. */
+.frame--top img { object-position: top; }
+
 .frame--tall { aspect-ratio: 3 / 4; }
 .frame--wide { aspect-ratio: 16 / 10; }
 .frame--square { aspect-ratio: 1; }
