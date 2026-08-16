@@ -1,9 +1,10 @@
 # Ellie Carpenter — portfolio
 
-A hand-built portfolio site for painter and graphic designer Ellie Carpenter,
-covering two bodies of work: her **alcohol ink paintings**, and **Grip**, her
-final major project at Leeds Arts University (2024) — an interactive educational
-body of work on the Windrush Generation, held inside a vintage suitcase.
+A hand-built portfolio site for graphic designer Ellie Carpenter, led by
+**Grip**: her final major project at Leeds Arts University (2024), an
+interactive educational body of work on the Windrush Generation held inside a
+vintage suitcase. Her earlier **alcohol ink paintings** appear as a gallery
+section on the home page.
 
 Plain HTML, CSS and JavaScript. No build step, no frameworks, no dependencies —
 open `index.html` in a browser and it works.
@@ -11,8 +12,7 @@ open `index.html` in a browser and it works.
 ## Structure
 
 ```
-index.html               Home — hero, selected work, about, contact
-projects/paintings.html  Painting gallery — framed works and studies
+index.html               Home — hero, Grip, earlier paintings, about, contact
 projects/grip.html       Full case study for Grip
 404.html                 Not-found page
 assets/css/style.css     The whole design system (tokens at the top)
@@ -36,12 +36,16 @@ Settings → Pages → Build and deployment → *Deploy from a branch*, then pic
 branch and the `/ (root)` folder. The site is served as-is; `.nojekyll` stops
 GitHub from running Jekyll over it.
 
-## Adding photographs
+## Photographs
 
-`assets/images/README.md` lists the exact filenames the site expects. Drop a
-file in with the matching name and it appears — until then, that frame shows a
-printed-looking placeholder rather than a broken image, so the site is
-presentable even with no photos in place.
+All 18 photographs are in `assets/images/`, resized to 1600 px on the long edge
+at 82% JPEG quality. `assets/images/README.md` lists every filename and where it
+is used. Any frame whose file is missing falls back to a printed-looking
+placeholder rather than a broken image.
+
+The only gap is `ellie-portrait.jpg` — no portrait photograph was supplied, so
+the about section shows a piece of work instead. There is a comment in
+`index.html` marking where to swap one in.
 
 ## Editing the words
 
